@@ -9,23 +9,21 @@ const port = process.env.port || 3000;
 
 // ตั้งค่าให้ Express ใช้ EJS เป็น Template Engine
 app.set('view engine', 'ejs');
+
 // Middleware สำหรับ parsing body
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(bodyParser.json());
 
 // ตั้งค่าโฟลเดอร์ assets สำหรับไฟล์ static เช่น CSS, รูปภาพ, และ JS
 app.use(express.static('assets'));
 
-// ทดลองดึงข้อมูล
-// app.get('/', async (req, res) => {
-//     try{
-//         const result = await conDB.query('SELECT * FROM users');
-//         res.render('test.ejs', { users: result.rows });
-//     }catch (err){
-//         console.error(err.message);
-//         res.status(500).send('Server error');
-//     }
-// });
+app.use(session({ //สร้าง session
+    secret: 'secret_key', // ใช้สำหรับเข้ารหัส session
+    resave: false, // ไม่ต้องบันทึก session ใหม่ทุกครั้ง
+    saveUninitialized: true, // ต้องบันทึก session ใหม่ทุกครั้ง
+    cookie: { maxAge: 1800000 } // อายุของ session ใน ms (30 นาที)
+}));
 
 // ฟังก์ชันสำหรับสร้างปฏิทินของเดือนที่กำหนด
 const generateCalendar = (year, month) => {
@@ -66,11 +64,6 @@ app.get('/', async (req, res) =>{
     res.render('index.ejs');
 });
 
-// หน้าล็อคอิน
-app.get('/login', async (req, res) => {
-    res.render('login.ejs')
-});
-
 // หน้าแสดงข้อมูลเช็คชื่อ
 app.get('/info/:id', async (req, res) => {
     const student = String(req.params.id); //รหัสนักศึกษา
@@ -90,6 +83,7 @@ app.get('/info/:id', async (req, res) => {
             where student_number = $1 `,[student]
         );
 
+        // ถ้าไม่พบให้เปลี่ยนหน้าไปแสดง error
         if (result_student.rows.length === 0) {
             return res.status(404).send(
                 `<script>
@@ -109,13 +103,11 @@ app.get('/info/:id', async (req, res) => {
         // ฟังชั่นแยกวัน
         result_daychecked.rows.forEach(rows => {
             const dateNewFormat = moment(rows.active_date).tz('Asia/Bangkok').format('YYYY-MM-DD'); //แปลง format เป็น 2024-09-10
-            // let checkyear = parseInt(dateNewFormat.substring(0,4));
-            // let checkmonth = parseInt(dateNewFormat.substring(5,7));
-            let checkday = parseInt(dateNewFormat.substring(8,10));
-            daydate.push(checkday);
+            let checkday = parseInt(dateNewFormat.substring(8,10)); //แยกวัน
+            daydate.push(checkday); //เพิ่มวันลงไปใน array
         });
 
-        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate});
+        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate });
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');
@@ -142,6 +134,7 @@ app.get('/info/:id/:month/:year', async (req, res) => {
             where student_number = $1 `,[student]
         );
 
+        // ถ้าไม่พบให้เปลี่ยนหน้าไปแสดง error
         if (result_student.rows.length === 0) {
             return res.status(404).send(
                 `<script>
@@ -162,8 +155,8 @@ app.get('/info/:id/:month/:year', async (req, res) => {
         // ฟังชั่นแยกวัน
         result_daychecked.rows.forEach(rows => {
             const dateNewFormat = moment(rows.active_date).tz('Asia/Bangkok').format('YYYY-MM-DD'); //แปลง format เป็น 2024-09-10
-            let checkday = parseInt(dateNewFormat.substring(8,10));
-            daydate.push(checkday);
+            let checkday = parseInt(dateNewFormat.substring(8,10)); //แยกวัน
+            daydate.push(checkday); //เพิ่มวันลงไปใน array
         });
         
         res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate });
@@ -173,6 +166,45 @@ app.get('/info/:id/:month/:year', async (req, res) => {
     }
 });
 
+// หน้าล็อคอิน
+app.get('/login', async (req, res) => {
+    // เช็คล็อกอิน
+    if(req.session.isLogin){
+        return res.redirect('/dashboard');
+    }
+    res.render('login.ejs')
+});
+
+// เข้าสู่ระบบ
+app.post('/login', (req, res) =>{
+    const username = req.body.user;
+    const password = req.body.pass;
+    req.session.isLogin = true;
+    req.session.name = username;
+    res.redirect('/dashboard');
+});
+
+// ออกจากระบบ
+app.get('/logout', (req, res) => {
+    //ลบ session
+    req.session.destroy(err => {
+        if (err) {
+            return res.send('Error logging out');
+        }
+        res.redirect('/login');
+    });
+});
+
+// หน้า dashboard
+app.get('/dashboard', async (req, res) => {
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+    res.render('test.ejs', { checklogin: req.session })
+});
+
+// หน้าแสดง error
 app.get('/error/:err', (req, res) => {
     res.render('error.ejs');
 });

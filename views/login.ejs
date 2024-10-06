@@ -24,7 +24,7 @@
     <div class="main-container">
         <div class="login-form">
             <h1 class="loginf-head"><i class="fa-duotone fa-solid fa-users"></i> เข้าสู่ระบบ</h1>
-            <form action="/login" method="post">
+            <form action="/login" method="post" name="login-form" id="login-form">
                 <div><input class="form-control" type="text" name="user" id="user" placeholder="Username"></div>
                 <div><input class="form-control" type="password" name="pass" id="pass" placeholder="Password"></div>
                 <div><button class="btn btn-outline-primary" type="button" onclick="login();">เข้าสู่ระบบ</button></div>
@@ -42,6 +42,27 @@
         </ul>
     </footer>
 
+    <script>
+        function login(){
+            let form = document.getElementById('login-form');
+            let user = document.getElementById('user');
+            let pass = document.getElementById('pass');
+
+            if(user.value != "" && pass.value != ""){
+                form.submit();
+            }else{
+                Swal.fire({
+                    title: "แจ้งเตือน",
+                    text: "กรุณากรอกข้อมูลให้ครบก่อน!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                }).then((result) => {
+                    user.value = "";
+                    pass.value = "";
+                });;
+            }
+        }
+    </script>
     <!-- Import Script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
