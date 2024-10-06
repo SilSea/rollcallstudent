@@ -103,6 +103,31 @@ body,html{
         width: 100vw;
         text-align: center;
     }
+    /* LoginPage */
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 75px;
+        width: 280px;
+        border: 1px solid #c0bebeee;
+        border-radius: 15px;
+    }
+    .loginf-head {
+        margin-top: 3%;
+    }
+    .login-form > form {
+        width: 100%;
+        padding: 5%;
+    }
+    .login-form > form > div {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .login-form > form > div > button {
+        width: 100%;
+    }
 }
 @media screen and (min-width: 480px) {
     /* Navbar */
@@ -119,6 +144,31 @@ body,html{
         align-self: center;
         text-decoration: none;
         margin-right: 15px;
+    }
+    /* LoginPage */
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 75px;
+        width: 450px;
+        border: 1px solid #c0bebeee;
+        border-radius: 15px;
+    }
+    .loginf-head {
+        margin-top: 3%;
+    }
+    .login-form > form {
+        width: 100%;
+        padding: 5%;
+    }
+    .login-form > form > div {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .login-form > form > div > button {
+        width: 100%;
     }
 }
 @media screen and (min-width: 768px) {

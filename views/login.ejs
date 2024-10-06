@@ -22,15 +22,14 @@
 
     <!-- MainContent -->
     <div class="main-container">
-        <div class="mb-3 mt-3">
-            <label class="form-label">Username</label>
-            <input class="form-control" type="text" name="user" id="user" placeholder="Username">
+        <div class="login-form">
+            <h1 class="loginf-head"><i class="fa-duotone fa-solid fa-users"></i> เข้าสู่ระบบ</h1>
+            <form action="/login" method="post">
+                <div><input class="form-control" type="text" name="user" id="user" placeholder="Username"></div>
+                <div><input class="form-control" type="password" name="pass" id="pass" placeholder="Password"></div>
+                <div><button class="btn btn-outline-primary" type="button" onclick="login();">เข้าสู่ระบบ</button></div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input class="form-control" type="password" name="pass" id="pass" placeholder="Password">
-        </div>
-        <button class="btn btn-outline-success" type="button">Login</button>
     </div>
 
     <!-- Footer -->
