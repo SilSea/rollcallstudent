@@ -1,0 +1,20 @@
+{
+  "name": "rollcallstudent",
+  "version": "1.0.0",
+  "description": "this is a project in web programming ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nattawut Pulket",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "moment-timezone": "^0.5.45",
+    "pg": "^8.13.0"
+  }
+}

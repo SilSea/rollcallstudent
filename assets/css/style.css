@@ -1,0 +1,131 @@
+body,html{
+    height: 100%;
+}
+/* Navbar */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+}
+.nav-head:hover {
+    color: aqua;
+}
+.nav-head > img {
+    width: 100px;
+}
+.nav-alink:hover {
+    color: aqua;
+}
+
+/* Main-Container */
+.main-container {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.main-content {
+    display: flex;
+    height: 200px;
+}
+.from-search{
+    display: flex;
+    align-items: center;
+}
+.from-search > span {
+    display: flex;
+    font-size: xx-large;
+    align-items: center;
+    margin-right: 15px;
+}
+.from-search > .search-BT {
+    margin-left: 15px;
+    width: 150px;
+}
+.img-head {
+    font-size: 100px;
+}
+/* Calender */
+.checkin {
+    margin-top: 25px;
+}
+
+/* Footer */
+.footer-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    color: white;
+    background-color: black;
+}
+.footer-container > ul {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.footer-container > ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.footer-container > ul > li,.footer-container > span {
+    font-size: medium;
+    margin-left: 15px;
+}
+.footer-container > ul > li > a {
+    color: white;
+}
+
+@media screen and (min-width: 320px) {
+    /* Navbar */
+    .nav-head {
+        display: block;
+        color: white;
+        font-size: small;
+        text-decoration: none;
+    }
+    .nav-alink {
+        display: block;
+        color: white;
+        font-size: small;
+        align-self: center;
+        margin-right: 3.5px;
+        text-decoration: none;
+    }
+    /* Main-Container */
+    .info-main-content {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        text-align: center;
+    }
+}
+@media screen and (min-width: 480px) {
+    /* Navbar */
+    .nav-head {
+        display: block;
+        color: white;
+        font-size: x-large;
+        text-decoration: none;
+    }
+    .nav-alink {
+        display: block;
+        color: white;
+        font-size: medium;
+        align-self: center;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+}
+@media screen and (min-width: 768px) {
+    .info-main-content {
+        display: flex;
+        flex-direction: column;
+        width: 60vw;
+        text-align: center;
+    }
+}
