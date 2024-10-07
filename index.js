@@ -128,10 +128,10 @@ app.get('/info/:id/:month/:year', async (req, res) => {
     try {
         // ดึงข้อมูลนักศึกษา
         const result_student = await conDB.query(
-            `select student.id as student_id, * from student 
-            join prefix on student.prefix_id = prefix.id 
-            join curriculum on student.curriculum_id = curriculum.id 
-            where student_number = $1 `,[student]
+            `SELECT student.id as student_id, * FROM student 
+            JOIN prefix ON student.prefix_id = prefix.id 
+            JOIN curriculum ON student.curriculum_id = curriculum.id 
+            WHERE student_number = $1 `,[student]
         );
 
         // ถ้าไม่พบให้เปลี่ยนหน้าไปแสดง error
@@ -176,12 +176,28 @@ app.get('/login', async (req, res) => {
 });
 
 // เข้าสู่ระบบ
-app.post('/login', (req, res) =>{
+app.post('/login', async (req, res) =>{
     const username = req.body.user;
     const password = req.body.pass;
-    req.session.isLogin = true;
-    req.session.name = username;
-    res.redirect('/dashboard');
+
+    try {
+        const result_teacher = await conDB.query(
+            `SELECT * FROM teacher WHERE username = $1 AND password = $2`,[username,password]
+        );
+
+        if(result_teacher.rows.length == 1){
+            req.session.isLogin = true;
+            req.session.name = result_teacher.rows[0].id;
+
+            res.redirect('/dashboard');
+        }else{
+            res.redirect('/error/teaNotFound');
+        }
+    }catch{
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+    
 });
 
 // ออกจากระบบ
@@ -201,7 +217,7 @@ app.get('/dashboard', async (req, res) => {
     if(!req.session.isLogin){
         return res.redirect('/login');
     }
-    res.render('test.ejs', { checklogin: req.session })
+    res.render('management.ejs', { checklogin: req.session })
 });
 
 // หน้าแสดง error
