@@ -11,7 +11,7 @@
         const url = window.location.pathname;
         
         // ไม่พบข้อมูลนักศึกษาจากหน้าแรก
-        if(url == '/error/stdNotFound'){
+        if(url == '/notice/stdNotFound'){
             Swal.fire({
                 title: "แจ้งเตือน",
                 text: "ไม่พบข้อมูลนักศึกษาที่ท่านค้นหา!",
@@ -24,7 +24,7 @@
             });
         }
         // ไม่พบ Username and Password
-        if(url == '/error/teaNotFound'){
+        if(url == '/notice/teaNotFound'){
             Swal.fire({
                 title: "แจ้งเตือน",
                 text: "Username หรือ Password ของท่านไม่ถูกต้อง!",

@@ -87,7 +87,7 @@ app.get('/info/:id', async (req, res) => {
         if (result_student.rows.length === 0) {
             return res.status(404).send(
                 `<script>
-                    window.location.href='/error/stdNotFound';
+                    window.location.href='/notice/stdNotFound';
                 </script>`);
         }
 
@@ -138,7 +138,7 @@ app.get('/info/:id/:month/:year', async (req, res) => {
         if (result_student.rows.length === 0) {
             return res.status(404).send(
                 `<script>
-                    window.location.href='/error/stdNotFound';
+                    window.location.href='/notice/stdNotFound';
                 </script>`
             );
         }
@@ -167,12 +167,21 @@ app.get('/info/:id/:month/:year', async (req, res) => {
 });
 
 // หน้าล็อคอิน
-app.get('/login', async (req, res) => {
+app.get('/login', (req, res) => {
     // เช็คล็อกอิน
     if(req.session.isLogin){
         return res.redirect('/dashboard');
     }
-    res.render('login.ejs')
+    res.render('login.ejs');
+});
+
+// แจ้งเตือนหน้าล็อคอิน
+app.get('/login/:notice', (req, res) => {
+    // เช็คล็อกอิน
+    if(req.session.isLogin){
+        return res.redirect('/dashboard');
+    }
+    res.render('login.ejs');
 });
 
 // เข้าสู่ระบบ
@@ -187,13 +196,14 @@ app.post('/login', async (req, res) =>{
 
         if(result_teacher.rows.length == 1){
             req.session.isLogin = true;
-            req.session.name = result_teacher.rows[0].id;
+            req.session.userid = result_teacher.rows[0].id;
+            req.session.name = result_teacher.rows[0].first_name;
 
-            res.redirect('/dashboard');
+            res.redirect('/dashboard/lgSuccess');
         }else{
-            res.redirect('/error/teaNotFound');
+            res.redirect('/notice/teaNotFound');
         }
-    }catch{
+    }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');
     }
@@ -207,22 +217,39 @@ app.get('/logout', (req, res) => {
         if (err) {
             return res.send('Error logging out');
         }
-        res.redirect('/login');
+        res.redirect('/login/loSuccess');
     });
 });
 
 // หน้า dashboard
-app.get('/dashboard', async (req, res) => {
+app.get('/dashboard', (req, res) => {
     // เช็คว่าได้ล็อคอินยัง
     if(!req.session.isLogin){
         return res.redirect('/login');
     }
-    res.render('management.ejs', { checklogin: req.session })
+    res.render('management.ejs', { checklogin: req.session });
+});
+
+// ส่งแจ้งเตือนล็อกอิน
+app.get('/dashboard/:notice', (req, res) => {
+    const page = String(req.params.notice);
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    // ฟังชั่นเปลี่ยนหน้า
+    if(page == 'addstudent'){
+        res.render('notice.ejs');
+    }else{ //ส่งแจ้งเตือนปกติ
+        res.render('management.ejs', {checklogin: req.session });
+    }
 });
 
 // หน้าแสดง error
-app.get('/error/:err', (req, res) => {
-    res.render('error.ejs');
+app.get('/notice/:err', (req, res) => {
+    res.render('notice.ejs');
 });
 
 app.listen(port,() => {

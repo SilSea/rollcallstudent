@@ -1,6 +1,9 @@
 body,html{
     height: 100%;
 }
+li {
+    list-style: none;
+}
 /* Navbar */
 .navbar-container {
     display: flex;
@@ -47,6 +50,7 @@ body,html{
 .img-head {
     font-size: 100px;
 }
+
 /* Calender */
 .checkin {
     margin-top: 25px;
@@ -96,6 +100,14 @@ body,html{
         margin-right: 3.5px;
         text-decoration: none;
     }
+    /* DropdownNavbar */
+    .nav-item {
+        display: flex;
+        color: white;
+        align-items: center;
+        margin-right: 5px;
+    }
+
     /* Main-Container */
     .info-main-content {
         display: flex;
@@ -103,6 +115,7 @@ body,html{
         width: 100vw;
         text-align: center;
     }
+
     /* LoginPage */
     .login-form {
         display: flex;
@@ -145,6 +158,14 @@ body,html{
         text-decoration: none;
         margin-right: 15px;
     }
+    /* DropdownNavbar */
+    .nav-item {
+        display: flex;
+        color: white;
+        align-items: center;
+        margin-right: 20px;
+    }
+
     /* LoginPage */
     .login-form {
         display: flex;
