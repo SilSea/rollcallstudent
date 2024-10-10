@@ -240,10 +240,10 @@ app.get('/dashboard/:notice', (req, res) => {
     }
 
     // ฟังชั่นเปลี่ยนหน้า
-    if(page == 'addstudent'){
-        res.render('notice.ejs');
+    if(page == 'addstudent'){ //หน้าเพิ่มข้อมูล
+        res.render('addstudent.ejs', { checklogin: req.session });
     }else{ //ส่งแจ้งเตือนปกติ
-        res.render('management.ejs', {checklogin: req.session });
+        res.render('management.ejs', { checklogin: req.session });
     }
 });
 
