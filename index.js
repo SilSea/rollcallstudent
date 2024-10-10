@@ -239,12 +239,7 @@ app.get('/dashboard/:notice', (req, res) => {
         return res.redirect('/login');
     }
 
-    // ฟังชั่นเปลี่ยนหน้า
-    if(page == 'addstudent'){ //หน้าเพิ่มข้อมูล
-        res.render('addstudent.ejs', { checklogin: req.session });
-    }else{ //ส่งแจ้งเตือนปกติ
-        res.render('management.ejs', { checklogin: req.session });
-    }
+    res.render('management.ejs', { checklogin: req.session });
 });
 
 // หน้าแสดง error
