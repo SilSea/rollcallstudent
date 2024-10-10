@@ -242,6 +242,8 @@ app.get('/dashboard/:notice', (req, res) => {
     res.render('management.ejs', { checklogin: req.session });
 });
 
+
+
 // หน้าแสดง error
 app.get('/notice/:err', (req, res) => {
     res.render('notice.ejs');
