@@ -3,6 +3,7 @@ import session from 'express-session';
 import conDB from './db.js';
 import bodyParser from 'body-parser';
 import moment from 'moment-timezone';
+import req from 'express/lib/request.js';
 
 const app = express();
 const port = process.env.port || 3000;
@@ -201,7 +202,7 @@ app.post('/login', async (req, res) =>{
 
             res.redirect('/dashboard/lgSuccess');
         }else{
-            res.redirect('/notice/teaNotFound');
+            res.redirect('/login/lgNotFound');
         }
     }catch (err){
         console.error(err.message);
@@ -232,7 +233,6 @@ app.get('/dashboard', (req, res) => {
 
 // ส่งแจ้งเตือนล็อกอิน
 app.get('/dashboard/:notice', (req, res) => {
-    const page = String(req.params.notice);
 
     // เช็คว่าได้ล็อคอินยัง
     if(!req.session.isLogin){
@@ -242,7 +242,174 @@ app.get('/dashboard/:notice', (req, res) => {
     res.render('management.ejs', { checklogin: req.session });
 });
 
+// หน้าเช็คการเข้าเรียนทั้งหมด
+app.get('/allcheckdate', async (req, res) => {
 
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงกลุ่มวันที่เช็ค
+        const result_checkday = await conDB.query(
+            `SELECT TO_CHAR(student_list.active_date, 'DD-MM-YYYY') AS checkedday, student_list.status, section.section
+            FROM student_list 
+            JOIN section ON section.id = student_list.section_id
+            GROUP BY student_list.active_date, student_list.status, section.section
+            ORDER BY student_list.active_date DESC`
+        );
+
+        res.render('allcheckdate.ejs', { checklogin: req.session, checkdayinfo: result_checkday.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// หน้าข้อมูลนักศึกษาทั้งหมด
+app.get('/allstudent', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลนักศึกษา
+        const result_student = await conDB.query(
+            `SELECT student.id as student_id, TO_CHAR(student.date_of_birth, 'DD-MM-YYYY') as birthday ,* FROM student 
+            JOIN prefix ON student.prefix_id = prefix.id 
+            JOIN curriculum ON student.curriculum_id = curriculum.id
+            ORDER BY student_number ASC`
+        );
+
+        res.render('allstudent.ejs', { checklogin: req.session, studentinfo: result_student.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+    
+});
+
+// แจ้งเตือนหน้าข้อมูลนักศึกษา
+app.get('/allstudent/:notice', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลนักศึกษา
+        const result_student = await conDB.query(
+            `SELECT student.id as student_id, TO_CHAR(student.date_of_birth, 'DD-MM-YYYY') as birthday ,* FROM student 
+            JOIN prefix ON student.prefix_id = prefix.id 
+            JOIN curriculum ON student.curriculum_id = curriculum.id
+            ORDER BY student_number ASC`
+        );
+
+        res.render('allstudent.ejs', { checklogin: req.session, studentinfo: result_student.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// หน้าข้อมูลหลักสูตรทั้งหมด
+app.get('/allcurriculum', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลหลักสูตร
+        const result_curriculum = await conDB.query(
+            `SELECT * FROM curriculum`
+        );
+
+        res.render('allcurriculum.ejs', { checklogin: req.session, curriculuminfo: result_curriculum.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+    
+});
+
+// แจ้งเตือนหน้าหลักสูตรทั้งหมด
+app.get('/allcurriculum/:notice', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลหลักสูตร
+        const result_curriculum = await conDB.query(
+            `SELECT * FROM curriculum`
+        );
+
+        res.render('allcurriculum.ejs', { checklogin: req.session, curriculuminfo: result_curriculum.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// หน้าข้อมูลห้องทั้งหมด
+app.get('/allsection', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลห้อง
+        const result_section = await conDB.query(
+            `SELECT * FROM section`
+        );
+
+        res.render('allsection.ejs', { checklogin: req.session, sectioninfo: result_section.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+    
+});
+
+// แจ้งเตือนหน้าข้อมูลห้องทั้งหมด
+app.get('/allsection/:notice', async (req, res) => {
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+
+        // ดึงข้อมูลห้อง
+        const result_section = await conDB.query(
+            `SELECT * FROM section`
+        );
+
+        res.render('allsection.ejs', { checklogin: req.session, sectioninfo: result_section.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+
+});
 
 // หน้าแสดง error
 app.get('/notice/:err', (req, res) => {

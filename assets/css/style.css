@@ -56,6 +56,46 @@ li {
     margin-top: 25px;
 }
 
+/* Management */
+.main-dashboard-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    margin-top: 3%;
+}
+.header-content {
+    display: flex;
+    justify-content: center;
+    font-size: xx-large;
+    font-weight: bolder;
+}
+.row-content > div > button {
+    background-color: aquamarine;
+    border: 1px solid aquamarine;
+    border-radius: 5px;
+}
+
+/* ALL Student Curriculum Section */
+.main-dashboard-content div > table {
+    text-align: center;
+    margin-top: 25px;
+}
+.searchBox {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+.searchBox > input {
+    width: 450px;
+}
+.rowButtonBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
 /* Footer */
 .footer-container {
     position: fixed;
@@ -141,6 +181,23 @@ li {
     .login-form > form > div > button {
         width: 100%;
     }
+
+    /* Management */
+    .row-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 35px;
+        height: 600px;
+    }
+    .row-content > div > button {
+        background-color: aquamarine;
+        border: 1px solid aquamarine;
+        border-radius: 5px;
+        width: 300px;
+        height: 50px;
+    }
 }
 @media screen and (min-width: 480px) {
     /* Navbar */
@@ -191,12 +248,39 @@ li {
     .login-form > form > div > button {
         width: 100%;
     }
+
+    /* Management */
+    .row-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 200px;
+    }
+    .row-content > div > button {
+        background-color: aquamarine;
+        border: 1px solid aquamarine;
+        border-radius: 5px;
+        width: 100px;
+        height: 50px;
+    }
+
 }
 @media screen and (min-width: 768px) {
+
     .info-main-content {
         display: flex;
         flex-direction: column;
         width: 60vw;
         text-align: center;
+    }
+
+    /* Management */
+    .row-content > div > button {
+        background-color: aquamarine;
+        border: 1px solid aquamarine;
+        border-radius: 5px;
+        width: 150px;
+        height: 50px;
     }
 }

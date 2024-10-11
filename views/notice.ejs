@@ -24,19 +24,6 @@
                 }
             });
         }
-        // ไม่พบ Username and Password
-        if(url == '/notice/teaNotFound'){
-            Swal.fire({
-                title: "แจ้งเตือน",
-                text: "Username หรือ Password ของท่านไม่ถูกต้อง!",
-                icon: "error",
-                confirmButtonText: "OK"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/login";
-                }
-            });
-        }
     </script>
 </body>
 </html>

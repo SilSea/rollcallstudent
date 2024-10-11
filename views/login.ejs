@@ -89,6 +89,20 @@
             });
             
         }
+
+        // Username หรือ Password ไม่ถูกต้องหรือไม่มีข้อมูล
+        if(url == '/login/lgNotFound'){
+            Swal.fire({
+                title: "แจ้งเตือน",
+                text: "Username หรือ Password ของท่านไม่ถูกต้อง!",
+                icon: "error",
+                confirmButtonText: "OK"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/login";
+                }
+            });
+        }
     </script>
     <!-- Import Script -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

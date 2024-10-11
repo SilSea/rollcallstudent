@@ -34,7 +34,41 @@
 
     <!-- MainContent -->
     <div class="main-container">
-        
+        <div class="main-dashboard-content">
+            <div class="header-content">ข้อมูลหลักสูตรทั้งหมด</div>
+            <div class="searchBox"><input class="form-control" type="text" name="searchBox" id="searchBox" placeholder="ค้นหาชื่อหลักสูตร"></div>
+            <div class="rowButtonBox">
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'">ย้อนกลับ</button>
+                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addcurriculum'">เพิ่มข้อมูลหลักสูตร</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>รหัสหลักสูตร</th>
+                            <th>ชื่อเต็มหลักสูตรภาษาไทย</th>
+                            <th>ชื่อเต็มหลักสูตรภาษาอังกฤษ</th>
+                            <th>ชื่อย่อหลักสูตรภาษาไทย</th>
+                            <th>ชื่อย่อหลักสูตรภาษาอังกฤษ</th>
+                            <th colspan="2">#</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchTable">
+                        <% curriculuminfo.forEach(function(curri) { %>
+                        <tr>
+                            <td><%= curri.id %></td>
+                            <td><%= curri.curr_name_th %></td>
+                            <td><%= curri.curr_name_en %></td>
+                            <td><%= curri.short_name_th %></td>
+                            <td><%= curri.short_name_en %></td>
+                            <td><button class="btn btn-outline-success" onclick="editData('/editcurriculum/',<%= curri.id %>);">แก้ไขข้อมูล</button></td>
+                            <td><button class="btn btn-outline-danger" onclick="delData('/delcurriculum/',<%= curri.id %>);">ลบข้อมูล</button></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </>
     </div>
 
     <!-- Footer -->
@@ -47,10 +81,8 @@
         </ul>
     </footer>
 
-    <script>
-        
-    </script>
     <!-- Import Script -->
+    <script src="/js/javascript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
