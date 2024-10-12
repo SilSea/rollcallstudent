@@ -53,10 +53,31 @@
                         <% calendar.forEach(week => { %>
                             <tr>
                                 <% week.forEach(day => { %>
-                                    <td><%- day ? (daydate.includes(day) ? day + '/' + now_month + '/' + year + '<br><img src="/imgs/check.png" width="15px" ' : day + '/' + now_month + '/' + year + '<br><img src="/imgs/cancel.png" width="15px"') : '' %></td> <!-- แสดงเลขวันที่ หรือช่องว่างถ้าไม่มีวัน -->
+                                    <td>
+                                        <% if (day) { %>
+                                            <% const dayIndex = daydate.indexOf(day); %> <!-- รับดัชนีของวันปัจจุบัน -->
+                                            <% if (dayIndex !== -1) { %> <!-- ถ้าวันนั้นถูกพบใน daydate -->
+                                                <%= day + '/' + now_month + '/' + year %><br>
+                                                <% if (daystatus[dayIndex] === 'N') { %> <!-- ถ้าสถานะเท่ากับ 'N' -->
+                                                    <img src="/imgs/check.png" width="15px"> <!-- แสดงรูปเช็ค -->
+                                                <% } else if (daystatus[dayIndex] === 'L') { %> <!-- ถ้าสถานะเท่ากับ 'L' -->
+                                                    <img src="/imgs/late.png" width="15px"> <!-- แสดงรูปสาย -->
+                                                <% } else if (daystatus[dayIndex] === 'P') { %> <!-- ถ้าสถานะเท่ากับ 'P' -->
+                                                    <img src="/imgs/medical.png" width="15px"> <!-- แสดงรูปมา -->
+                                                <% } else if (daystatus[dayIndex] === 'C') { %> <!-- ถ้าสถานะเท่ากับ 'C' -->
+                                                    <img src="/imgs/cancel.png" width="15px"> <!-- แสดงรูปไม่เช็ค -->
+                                                <% } %>
+                                            <% } else { %>
+                                                <%= day + '/' + now_month + '/' + year %><br>
+                                                <img src="/imgs/warning.png" width="15px"> <!-- วันไม่ได้เช็ค -->
+                                            <% } %>
+                                        <% } else { %>
+                                            <%= '' %> <!-- ช่องว่างสำหรับวันที่ไม่มีอยู่ -->
+                                        <% } %>
+                                    </td>
                                 <% }) %>
                             </tr>
-                        <% }) %>
+                        <% }) %>                                           
                     </tbody>
                 </table>
             </div>

@@ -71,6 +71,7 @@ app.get('/info/:id', async (req, res) => {
     const year = new Date().getFullYear(); // ปีปัจจุบัน
     const month = new Date().getMonth();   // เดือนปัจจุบัน (0 = ม.ค.)
     const daydate = []; //วันที่มีการเข้า
+    const daystatus = [];
 
     // สร้างปฏิทินสำหรับเดือนนั้น ๆ
     const calendar = generateCalendar(year, month);
@@ -106,9 +107,10 @@ app.get('/info/:id', async (req, res) => {
             const dateNewFormat = moment(rows.active_date).tz('Asia/Bangkok').format('YYYY-MM-DD'); //แปลง format เป็น 2024-09-10
             let checkday = parseInt(dateNewFormat.substring(8,10)); //แยกวัน
             daydate.push(checkday); //เพิ่มวันลงไปใน array
+            daystatus.push(rows.status);
         });
 
-        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate });
+        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate, daystatus });
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');
@@ -122,6 +124,7 @@ app.get('/info/:id/:month/:year', async (req, res) => {
     const cfmonth = req.params.month; //เดือนที่ต้องการ
     const month = parseInt(cfmonth)-1; //แปลงใช้ในปฎิทิน 0 = มกราคม
     const daydate = []; //วันที่มีการเข้า
+    const daystatus = [];
 
     // สร้างปฏิทินสำหรับเดือนนั้น ๆ
     const calendar = generateCalendar(year, month);
@@ -158,9 +161,10 @@ app.get('/info/:id/:month/:year', async (req, res) => {
             const dateNewFormat = moment(rows.active_date).tz('Asia/Bangkok').format('YYYY-MM-DD'); //แปลง format เป็น 2024-09-10
             let checkday = parseInt(dateNewFormat.substring(8,10)); //แยกวัน
             daydate.push(checkday); //เพิ่มวันลงไปใน array
+            daystatus.push(rows.status);
         });
         
-        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate });
+        res.render('info.ejs', { student_info: result_student.rows, calendar, year, month, daydate, daystatus });
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');
@@ -262,6 +266,59 @@ app.get('/allcheckdate', async (req, res) => {
 
         res.render('allcheckdate.ejs', { checklogin: req.session, checkdayinfo: result_checkday.rows });
 
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+app.get('/addcheckdate', async (req, res) => {
+
+    // ดึงปี, เดือน, และวัน
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // เดือนเริ่มนับจาก 0 จึงต้องบวก 1
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const dateNow = `${day}/${month}/${year}`;
+
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+        // ดึงข้อมูลนักศึกษา
+        const result_student = await conDB.query(
+            `SELECT student.id as student_id, * FROM student 
+            JOIN prefix ON student.prefix_id = prefix.id 
+            JOIN curriculum ON student.curriculum_id = curriculum.id
+            ORDER BY student.student_number ASC
+            `
+        );
+
+        const result_section = await conDB.query(
+            `SELECT * FROM section ORDER BY section ASC`
+        );
+
+        res.render('addcheckdate.ejs', { checklogin: req.session, dateNow, studentinfo: result_student.rows, sectioninfo: result_section.rows });
+
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+    
+});
+
+app.post('/addcheckdate', async (req, res) => {
+    console.log(req.body);
+    // เช็คว่าได้ล็อคอินยัง
+    if(!req.session.isLogin){
+        return res.redirect('/login');
+    }
+
+    try {
+
+        
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');

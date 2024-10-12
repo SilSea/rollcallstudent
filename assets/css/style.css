@@ -95,6 +95,9 @@ li {
     justify-content: space-between;
     margin-top: 25px;
 }
+.rowButtonBox > input {
+    width: 300px;
+}
 
 /* Footer */
 .footer-container {

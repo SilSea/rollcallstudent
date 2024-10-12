@@ -25,9 +25,9 @@
                 <i class="fa-duotone fa-solid fa-users"></i> <%= checklogin.name %>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/editaccount">แก้ไขข้อมูล</a></li>
+              <li><a class="dropdown-item" href="/editaccount"><i class="fa-duotone fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">ออกจากระบบ</a></li>
+              <li><a class="dropdown-item" href="/logout"><i class="fa-duotone fa-solid fa-right-to-bracket"></i> ออกจากระบบ</a></li>
             </ul>
         </li>
     </nav>
@@ -47,7 +47,6 @@
                         <tr>
                             <th>ห้องที่</th>
                             <th>วันที่เช็ค</th>
-                            <th>สถานะ</th>
                             <th colspan="2">#</th>
                         </tr>
                     </thead>
@@ -56,11 +55,6 @@
                         <tr>
                             <td><%= check.section %></td>
                             <td><%= check.checkedday %></td>
-                            <% if(check.status == 'N'){ %>
-                            <td><img src="/imgs/check.png" width="15px"></td>
-                            <% }else{ %>
-                            <td><img src="/imgs/cancel.png" width="15px"></td>
-                            <% } %>
                             <td><button class="btn btn-outline-success" onclick="editData('/editstudent/','<%= check.checkedday %>');">แก้ไขข้อมูล</button></td>
                             <td><button class="btn btn-outline-danger" onclick="delData('/delstudent/','<%= check.checkedday %>');">ลบข้อมูล</button></td>
                         </tr>

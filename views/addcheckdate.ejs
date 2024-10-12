@@ -25,16 +25,73 @@
                 <i class="fa-duotone fa-solid fa-users"></i> <%= checklogin.name %>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/editaccount">แก้ไขข้อมูล</a></li>
+              <li><a class="dropdown-item" href="/editaccount"><i class="fa-duotone fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">ออกจากระบบ</a></li>
+              <li><a class="dropdown-item" href="/logout"><i class="fa-duotone fa-solid fa-right-to-bracket"></i> ออกจากระบบ</a></li>
             </ul>
         </li>
     </nav>
 
     <!-- MainContent -->
     <div class="main-container">
-        
+        <div class="main-dashboard-content">
+            <div class="header-content">เช็คชื่อการเข้าเรียน</div>
+            <div class="searchBox"><input class="form-control" type="text" name="searchBox" id="searchBox" placeholder="ค้นหาชื่อนักศึกษา"></div>
+            <form action="/addcheckdate" method="post" id="addcheckdate">
+                <div class="rowButtonBox">
+                    <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/allcheckdate'">ย้อนกลับ</button>
+                    <input class="form-control" type="date" id="dateSelect" name="dateSelect" required>
+                    <button class="btn btn-outline-success" type="button" onclick="sendaddcheckDate();">บันทึกข้อมูล</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>เลือก</th>
+                                <th>รหัสนักศึกษา</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>ห้อง</th>
+                                <th>มา</th>
+                                <th>สาย</th>
+                                <th>ลา</th>
+                                <th>ขาด</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchTable">
+                            <% studentinfo.forEach(function(student, rowIndex) { %>
+                                <tr>
+                                    <td>
+                                        <!-- ตรวจสอบ check -->
+                                        <input class="form-check-input" type="checkbox" name="studentSelect[]" id="studentSelect_<%= rowIndex %>" value="<%= student.student_number %>">
+                                    </td>
+                                    <td><%= student.student_number %></td>
+                                    <td><%= student.prefix %> <%= student.first_name %> <%= student.last_name %></td>
+                                    <td>
+                                        <select class="form-control" name="sectionSelect[]" id="sectionSelect_<%= rowIndex %>">
+                                            <% sectioninfo.forEach(function(sec) { %>
+                                            <option value="<%= sec.id %>">Sec <%= sec.section %></option>
+                                            <% }); %>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" id="present<%= rowIndex %>" name="status_<%= rowIndex %>" value="N" onclick="checkOnly(this)">
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" id="late<%= rowIndex %>" name="status_<%= rowIndex %>" value="L" onclick="checkOnly(this)">
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" id="leave<%= rowIndex %>" name="status_<%= rowIndex %>" value="P" onclick="checkOnly(this)">
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" id="absent<%= rowIndex %>" name="status_<%= rowIndex %>" value="C" checked onclick="checkOnly(this)">
+                                    </td>
+                                </tr>
+                            <% }); %>                            
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -47,10 +104,124 @@
         </ul>
     </footer>
 
-    <script>
-        
-    </script>
     <!-- Import Script -->
+    <script>
+        // ฟังชั่นเลือก มา สาย ลา ขาด
+        function checkOnly(selectedCheckbox) {
+            // รับค่า checkbox
+            const checkboxes = document.getElementsByName(selectedCheckbox.name);
+        
+            checkboxes.forEach((checkbox) => {
+                // ถ้า check uncheck
+                if (checkbox !== selectedCheckbox) {
+                    checkbox.checked = false;
+                }
+            });
+        }
+
+        function sendaddcheckDate() {
+            // ดึง form
+            const form = document.getElementById('addcheckdate');
+
+            // สร้าง array สำหรับเก็บข้อมูลที่ต้องส่ง
+            const studentData = [];
+
+            // ดึงข้อมูล checkbox ของนักเรียน
+            const studentCheckboxes = document.getElementsByName('studentSelect[]');
+
+            // ดึงข้อมูลจาก input dateSelect
+            const dateSelect = document.getElementById('dateSelect').value;
+
+            // ตรวจสอบว่าได้เลือกวันหรือไม่
+            if (!dateSelect) {
+                // แจ้งเตือนว่าไม่มีการเลือกวัน
+                Swal.fire({
+                    title: "คำเตือน!",
+                    text: "กรุณาเลือกวันที่ก่อนที่จะบันทึกข้อมูล.",
+                    icon: "warning",
+                    confirmButtonText: "ตกลง"
+                });
+                return; // ไม่ส่งข้อมูล
+            }
+
+            // Loop ผ่านทุก checkbox เพื่อตรวจสอบว่า check หรือไม่
+            studentCheckboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    const sectionSelect = document.getElementById(`sectionSelect_${index}`);
+                    const statusCheckboxes = document.getElementsByName(`status_${index}`);
+                    let status = '';
+
+                    // Loop ผ่าน checkbox สถานะเพื่อตรวจสอบสถานะที่เลือก
+                    statusCheckboxes.forEach((statusCheckbox) => {
+                        if (statusCheckbox.checked) {
+                            status = statusCheckbox.value; // เก็บค่าสถานะที่เลือก
+                        }
+                    });
+
+                    // เพิ่มข้อมูลนักเรียนลงใน array
+                    studentData.push({
+                        checkid: checkbox.value, // student number
+                        section: sectionSelect.value, // section
+                        status: status, // status
+                        date: dateSelect // วันที่เลือก
+                    });
+                }
+            });
+
+            // ตรวจสอบว่า studentData มีข้อมูลหรือไม่
+            if (studentData.length === 0) {
+                // แจ้งเตือนว่าไม่มีการเลือกนักเรียน
+                Swal.fire({
+                    title: "คำเตือน!",
+                    text: "กรุณาเลือกนักเรียนอย่างน้อย 1 คนก่อนที่จะบันทึกข้อมูล.",
+                    icon: "warning",
+                    confirmButtonText: "ตกลง"
+                });
+                return; // ไม่ส่งข้อมูล
+            }
+
+            // แสดงข้อมูลใน console สำหรับตรวจสอบ
+            console.log('Received student data:', studentData);
+
+            // แจ้งเตือน
+            Swal.fire({
+                title: "คำเตือน?",
+                text: "คุณต้องการบันทึกข้อมูลใช่หรือไม่!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ใช่",
+                cancelButtonText: "ไม่"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "สำเร็จ!",
+                        text: "บันทึกข้อมูลเข้าระบบเรียบร้อย.",
+                        icon: "success",
+                        confirmButtonText: "ใช่"
+                    }).then(() => {
+                        // ตัวอย่างการส่งข้อมูลด้วย fetch API
+                        fetch('/addcheckdate', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(studentData) // ส่งข้อมูลเป็น JSON
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    });
+                }
+            });
+        }
+    </script>        
+    <script src="/js/javascript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
