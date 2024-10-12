@@ -1,5 +1,6 @@
 body,html{
     height: 100%;
+    margin: 0;
 }
 li {
     list-style: none;
@@ -24,9 +25,8 @@ li {
 .main-container {
     display: flex;
     width: 100%;
-    height: auto;
+    min-height: calc(100vh - 70px);
     align-items: center;
-    justify-content: center;
     flex-direction: column;
 }
 .main-content {
@@ -101,8 +101,6 @@ li {
 
 /* Footer */
 .footer-container {
-    position: fixed;
-    bottom: 0;
     width: 100%;
     height: 50px;
     text-align: center;
@@ -165,7 +163,7 @@ li {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 75px;
+        margin-top: 230px;
         width: 280px;
         border: 1px solid #c0bebeee;
         border-radius: 15px;
@@ -232,7 +230,6 @@ li {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 75px;
         width: 450px;
         border: 1px solid #c0bebeee;
         border-radius: 15px;

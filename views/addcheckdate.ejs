@@ -62,7 +62,7 @@
                                 <tr>
                                     <td>
                                         <!-- ตรวจสอบ check -->
-                                        <input class="form-check-input" type="checkbox" name="studentSelect[]" id="studentSelect_<%= rowIndex %>" value="<%= student.student_number %>">
+                                        <input class="form-check-input" type="checkbox" name="studentSelect[]" id="studentSelect_<%= rowIndex %>" value="<%= student.student_id %>">
                                     </td>
                                     <td><%= student.student_number %></td>
                                     <td><%= student.prefix %> <%= student.first_name %> <%= student.last_name %></td>
@@ -160,7 +160,7 @@
 
                     // เพิ่มข้อมูลนักเรียนลงใน array
                     studentData.push({
-                        checkid: checkbox.value, // student number
+                        studentid: checkbox.value, // student number
                         section: sectionSelect.value, // section
                         status: status, // status
                         date: dateSelect // วันที่เลือก
@@ -216,6 +216,8 @@
                         .catch((error) => {
                             console.error('Error:', error);
                         });
+
+                        window.location.href = '/allcheckdate';
                     });
                 }
             });

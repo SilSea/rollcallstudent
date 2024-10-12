@@ -272,6 +272,7 @@ app.get('/allcheckdate', async (req, res) => {
     }
 });
 
+// หน้าเช็คชื่อ
 app.get('/addcheckdate', async (req, res) => {
 
     // ดึงปี, เดือน, และวัน
@@ -309,16 +310,32 @@ app.get('/addcheckdate', async (req, res) => {
     
 });
 
-app.post('/addcheckdate', async (req, res) => {
-    console.log(req.body);
+// เพิ่มข้อมูลลง addcheckdate
+app.post('/addcheckdate', async  (req, res) => {
+
+    // ดึงข้อมูลจาก addcheckdate
+    const insertData = req.body;
+
     // เช็คว่าได้ล็อคอินยัง
     if(!req.session.isLogin){
         return res.redirect('/login');
     }
-
+    
     try {
 
-        
+        // วนลูปเพิ่มข้อมูล
+        for (const data of insertData) {
+            
+            // insert ข้อมูล
+            const result_addcheckdate = await conDB.query(
+                `
+                INSERT INTO student_list(section_id, student_id, active_date, status) VALUES
+                ($1,$2,$3,$4)
+                `,[data.section, data.studentid, data.date, data.status]
+            );
+
+        }
+
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server error');
