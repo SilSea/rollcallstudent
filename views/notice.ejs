@@ -24,6 +24,19 @@
                 }
             });
         }
+        // isCancel
+        if(url == '/notice/stdIsCancel'){
+            Swal.fire({
+                title: "แจ้งเตือน",
+                text: "นักศึกษาคนนี้ถูกยกเลิกการลงทะเบียน!",
+                icon: "error",
+                confirmButtonText: "OK"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/";
+                }
+            });
+        }
     </script>
 </body>
 </html>

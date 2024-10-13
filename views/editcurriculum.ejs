@@ -34,7 +34,38 @@
 
     <!-- MainContent -->
     <div class="main-container">
-        
+        <div class="main-dashboard-content">
+            <div class="header-content">แก้ไขข้อมูลหลักสูตร</div>
+            <div class="rowButtonBox">
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/allcurriculum'">ย้อนกลับ</button>
+                <button class="btn btn-outline-success" type="button" onclick="editCurriculum();">บันทึกข้อมูล</button>
+            </div>
+            <div class="form-container">
+                <div class="form-wrapper">
+                    <form id="editcurriculum" action="/editcurriculum" method="post">
+                        <div class="form-group">
+                            <label for="currNameTh">ชื่อเต็มหลักสูตรภาษาไทย</label>
+                            <input type="text" class="form-control" id="currNameTh" name="currNameTh" value="<%= curriculum.curr_name_th %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="currNameEn">ชื่อเต็มหลักสูตรภาษาอังกฤษ</label>
+                            <input type="text" class="form-control" id="currNameEn" name="currNameEn" value="<%= curriculum.curr_name_en %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="shortNameTh">ชื่อย่อหลักสูตรภาษาไทย</label>
+                            <input type="text" class="form-control" id="shortNameTh" name="shortNameTh" value="<%= curriculum.short_name_th %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="shortNameEn">ชื่อย่อหลักสูตรภาษาอังกฤษ</label>
+                            <input type="text" class="form-control" id="shortNameEn" name="shortNameEn" value="<%= curriculum.short_name_en %>" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -48,6 +79,88 @@
     </footer>
 
     <!-- Import Script -->
+    <script>
+        function editCurriculum() {
+
+            // ดึง curriCulumId จาก URL
+            const urlParts = window.location.pathname.split('/');
+            const curriCulumId = urlParts[urlParts.length - 1]; // ค่าที่เป็น id จะอยู่ที่ส่วนสุดท้ายของ URL
+
+            // เก็บข้อมูลหลักสูตรใน object
+            const curriculumData = {
+                id: curriCulumId, // รับ ID จาก parameter
+                currNameTh: document.getElementById('currNameTh').value,
+                currNameEn: document.getElementById('currNameEn').value,
+                shortNameTh: document.getElementById('shortNameTh').value,
+                shortNameEn: document.getElementById('shortNameEn').value
+            };
+
+            // ตรวจสอบว่าทุกช่องกรอกครบถ้วนหรือไม่
+            for (const key in curriculumData) {
+                if (curriculumData[key].trim() === "") {
+                    Swal.fire({
+                        title: "คำเตือน!",
+                        text: "กรุณากรอกข้อมูลให้ครบถ้วน.",
+                        icon: "warning",
+                        confirmButtonText: "ตกลง"
+                    });
+                    return; // หยุดการทำงานของฟังก์ชันหากมีช่องว่าง
+                }
+            }
+
+            // แสดงยืนยันการบันทึกข้อมูล
+            Swal.fire({
+                title: "ยืนยัน?",
+                text: "คุณต้องการบันทึกข้อมูลหลักสูตรนี้ใช่หรือไม่?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ใช่",
+                cancelButtonText: "ไม่"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่อบันทึก
+                    fetch('/editcurriculum', { // ส่งไปยังเส้นทาง /editcurriculum/{id}
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(curriculumData) // ส่งข้อมูลเป็น JSON
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: "สำเร็จ!",
+                                text: "บันทึกข้อมูลหลักสูตรเรียบร้อยแล้ว.",
+                                icon: "success",
+                                confirmButtonText: "ตกลง"
+                            }).then(() => {
+                                window.location.href = '/allcurriculum'; // เปลี่ยนเส้นทางหลังการบันทึก
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "เกิดข้อผิดพลาด!",
+                                text: data.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล.",
+                                icon: "error",
+                                confirmButtonText: "ตกลง"
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: "เกิดข้อผิดพลาด!",
+                            text: "ไม่สามารถบันทึกข้อมูลได้.",
+                            icon: "error",
+                            confirmButtonText: "ตกลง"
+                        });
+                    });
+                }
+            });
+        }
+    </script>
     <script src="/js/javascript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

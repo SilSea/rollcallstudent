@@ -46,6 +46,7 @@
                     <thead>
                         <tr>
                             <th>รหัสนักศึกษา</th>
+                            <th>หลักสูตร</th>
                             <th>คำนำหน้า</th>
                             <th>ชื่อ</th>
                             <th>นามสกุล</th>
@@ -63,6 +64,7 @@
                         <% studentinfo.forEach(function(student) { %>
                         <tr>
                             <td><%= student.student_number %></td>
+                            <td><%= student.curr_name_th %></td>
                             <td><%= student.prefix %></td>
                             <td><%= student.first_name %></td>
                             <td><%= student.last_name %></td>
@@ -78,7 +80,6 @@
                             <td><img src="/imgs/cancel.png" width="15px"></td>
                             <% } %>
                             <td><button class="btn btn-outline-success" onclick="editData('/editstudent/',<%= student.student_id %>);">แก้ไขข้อมูล</button></td>
-                            <td><button class="btn btn-outline-danger" onclick="delData('/delstudent/',<%= student.student_id %>);">ลบข้อมูล</button></td>
                         </tr>
                         <% }); %>
                     </tbody>

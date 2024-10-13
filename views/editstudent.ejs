@@ -34,7 +34,96 @@
 
     <!-- MainContent -->
     <div class="main-container">
-        
+        <div class="main-dashboard-content">
+            <div class="header-content">แก้ไขข้อมูลนักศึกษา</div>
+            <div class="rowButtonBox">
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/allstudent'">ย้อนกลับ</button>
+                <button class="btn btn-outline-success" type="button" onclick="updatestudent();">บันทึกข้อมูล</button>
+            </div>
+            <div class="form-container">
+                <div class="form-wrapper">
+                    <form id="editstudent" action="/editstudent" method="post">
+                        <div class="form-group">
+                            <label for="studentNumber">รหัสนักศึกษา</label>
+                            <input type="text" class="form-control" id="studentNumber" name="studentNumber" value="<%= studentinfo.student_number %>" disabled>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="curriculum">Curriculum</label>
+                            <select class="form-control" id="curriculum" name="curriculum">
+                                <% curriculuminfo.forEach(function(curriculum) { %>
+                                    <option value="<%= curriculum.id %>" 
+                                            <%= curriculum.id === studentinfo.curriculum_id ? 'selected' : '' %>>
+                                        <%= curriculum.curr_name_th %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="prefix">คำนำหน้า</label>
+                            <select class="form-control" id="prefix" name="prefix" required>
+                                <% prefixinfo.forEach(function(prefix) { %>
+                                    <option value="<%= prefix.id %>" 
+                                            <%= prefix.id === studentinfo.prefix_id ? 'selected' : '' %>>
+                                        <%= prefix.prefix %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="firstName">ชื่อ</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= studentinfo.first_name %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="lastName">นามสกุล</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= studentinfo.last_name %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="birthDate">วันเดือนปีเกิด</label>
+                            <input type="date" class="form-control" id="birthDate" name="birthDate" value="<%= studentinfo.date_of_birth ? studentinfo.date_of_birth.toISOString().split('T')[0] : '' %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="previousSchool">โรงเรียนเก่า</label>
+                            <input type="text" class="form-control" id="previousSchool" name="previousSchool" value="<%= studentinfo.previous_school %>">
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="address">ที่อยู่</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required><%= studentinfo.address %>
+                            </textarea>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="phone">เบอร์โทรศัพท์</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{10}" value="<%= studentinfo.telephone %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="email">อีเมล์</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= studentinfo.email %>" required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="lineId">ไลน์ไอดี</label>
+                            <input type="text" class="form-control" id="lineId" name="lineId" value="<%= studentinfo.line_id %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status">สถานะ</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="N" <%= studentinfo.status === 'N' ? 'selected' : '' %>>ปกติ</option>
+                                <option value="C" <%= studentinfo.status === 'C' ? 'selected' : '' %>>ยกเลิก</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+        </div>
     </div>
 
     <!-- Footer -->
@@ -48,6 +137,101 @@
     </footer>
 
     <!-- Import Script -->
+    <script>
+        function updatestudent() {
+            // ดึง studentId จาก URL
+            const urlParts = window.location.pathname.split('/');
+            const studentId = urlParts[urlParts.length - 1]; // ค่าที่เป็น id จะอยู่ที่ส่วนสุดท้ายของ URL
+
+            // เก็บข้อมูลนักเรียนใน object
+            const studentData = {
+                id: studentId, // ตั้งค่า id เป็น studentId ที่ได้จาก URL
+                studentNumber: document.getElementById('studentNumber').value,
+                prefix: document.getElementById('prefix').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                birthDate: document.getElementById('birthDate').value,
+                previousSchool: document.getElementById('previousSchool').value,
+                address: document.getElementById('address').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                lineId: document.getElementById('lineId').value,
+                curriculum: document.getElementById('curriculum').value,
+                status: document.getElementById('status').value // เพิ่มฟิลด์ status
+            };
+
+            // เช็คว่าทุกช่องกรอกครบหรือไม่
+            for (const key in studentData) {
+                if (studentData[key] === "" && key !== 'lineId' && key !== 'previousSchool') { // lineId และ previousSchool อาจไม่ต้องกรอก
+                    Swal.fire({
+                        title: "คำเตือน!",
+                        text: "กรุณากรอกข้อมูลให้ครบถ้วน.",
+                        icon: "warning",
+                        confirmButtonText: "ตกลง"
+                    });
+                    return; // หยุดการทำงานของฟังก์ชันหากมีช่องว่างที่จำเป็น
+                }
+            }
+
+            // แสดงยืนยันการอัปเดตข้อมูล
+            Swal.fire({
+                title: "คำเตือน?",
+                text: "คุณต้องการบันทึกข้อมูลใช่หรือไม่!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ใช่",
+                cancelButtonText: "ไม่"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่ออัปเดต
+                    fetch('/editstudent', { // ส่งไปยัง editstudent
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(studentData) // ส่งข้อมูลเป็น JSON
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(data => {
+                                Swal.fire({
+                                    title: "เกิดข้อผิดพลาด!",
+                                    text: data.message, // ข้อความแจ้งเตือนจากเซิร์ฟเวอร์
+                                    icon: "error",
+                                    confirmButtonText: "ตกลง"
+                                });
+                            });
+                        }
+                        return response.json(); // คืนค่าข้อมูล JSON ถ้าสถานะถูกต้อง
+                    })
+                    .then(data => {
+                        if (data && data.message) {
+                            Swal.fire({
+                                title: "สำเร็จ!",
+                                text: data.message, // ข้อความสำเร็จจากเซิร์ฟเวอร์
+                                icon: "success",
+                                confirmButtonText: "ตกลง"
+                            }).then(() => {
+                                window.location.href = '/allstudent'; // เปลี่ยนเส้นทางไปยังหน้าที่ต้องการหลังการอัปเดต
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: "เกิดข้อผิดพลาด!",
+                            text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูล.",
+                            icon: "error",
+                            confirmButtonText: "ตกลง"
+                        });
+                    });
+                }
+            });
+        }
+
+    </script>
     <script src="/js/javascript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
