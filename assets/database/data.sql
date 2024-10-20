@@ -27,3 +27,6 @@ insert into student_list(id,section_id,student_id,active_date,status) VALUES
 (2,1,3,'2024-09-08','N'),
 (3,2,2,'2024-09-09','M'),
 (4,2,4,'2024-09-09','N');
+
+-- Teacher
+insert into teacher(username, password, first_name, last_name) VALUES ('admin','admin','admin','admin')
