@@ -38,8 +38,8 @@
             <div class="header-content">ข้อมูลหลักสูตรทั้งหมด</div>
             <div class="searchBox"><input class="form-control" type="text" name="searchBox" id="searchBox" placeholder="ค้นหาชื่อหลักสูตร"></div>
             <div class="rowButtonBox">
-                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'">ย้อนกลับ</button>
-                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addcurriculum'">เพิ่มข้อมูลหลักสูตร</button>
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'"><i class="fa-solid fa-left"></i> ย้อนกลับ</button>
+                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addcurriculum'"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลหลักสูตร</button>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -61,7 +61,7 @@
                             <td><%= curri.curr_name_en %></td>
                             <td><%= curri.short_name_th %></td>
                             <td><%= curri.short_name_en %></td>
-                            <td><button class="btn btn-outline-success" onclick="editData('/editcurriculum/',<%= curri.id %>);">แก้ไขข้อมูล</button></td>
+                            <td><button class="btn btn-outline-success" onclick="editData('/editcurriculum/',<%= curri.id %>);"><i class="fa-duotone fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</button></td>
                         </tr>
                         <% }); %>
                     </tbody>

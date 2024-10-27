@@ -38,8 +38,8 @@
             <div class="header-content">ข้อมูลเช็คชื่อการเข้าเรียน</div>
             <div class="searchBox"><input class="form-control" type="text" name="searchBox" id="searchBox" placeholder="ค้นหาวันเช็คชื่อ"></div>
             <div class="rowButtonBox">
-                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'">ย้อนกลับ</button>
-                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addcheckdate'">เช็คชื่อเข้าเรียน</button>
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'"><i class="fa-solid fa-left"></i> ย้อนกลับ</button>
+                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addcheckdate'"><i class="fa-solid fa-plus"></i> เช็คชื่อเข้าเรียน</button>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -55,8 +55,8 @@
                         <tr>
                             <td><%= check.section %></td>
                             <td><%= check.checkedday %></td>
-                            <td><button class="btn btn-outline-success" onclick="editData('/editcheckdate/','<%= check.checkedday %>');">แก้ไขข้อมูล</button></td>
-                            <td><button class="btn btn-outline-danger" onclick="delData('/delcheckdate/','<%= check.checkedday %>');">ลบข้อมูล</button></td>
+                            <td><button class="btn btn-outline-success" onclick="editData('/editcheckdate/','<%= check.checkedday %>');"><i class="fa-duotone fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</button></td>
+                            <td><button class="btn btn-outline-danger" onclick="delData('/delcheckdate/','<%= check.checkedday %>');"><i class="fa-solid fa-trash"></i> ลบข้อมูล</button></td>
                         </tr>
                         <% }); %>
                     </tbody>

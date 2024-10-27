@@ -55,6 +55,17 @@ li {
 .checkin {
     margin-top: 25px;
 }
+.info-img {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.info-img > div {
+    margin-left: 15px;
+}
+.info-img > div > span {
+    font-weight: bolder;
+}
 
 /* Management */
 .main-dashboard-content {
@@ -71,9 +82,15 @@ li {
     font-weight: bolder;
 }
 .row-content > div > button {
-    background-color: aquamarine;
-    border: 1px solid aquamarine;
+    background-color: #fff;
+    border: 2px solid #e0f2ff;
+    color: #1a73e8;
     border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.row-content > div > button:hover {
+    color: #fff;
+    background-color: #1a73e8;
 }
 
 /* ALL Student Curriculum Section */
@@ -193,8 +210,10 @@ li {
         height: 600px;
     }
     .row-content > div > button {
-        background-color: aquamarine;
-        border: 1px solid aquamarine;
+        background-color: #fff;
+        border: 2px solid #e0f2ff;
+        color: #1a73e8;
+        font-size: x-large;
         border-radius: 5px;
         width: 300px;
         height: 100px;
@@ -262,8 +281,9 @@ li {
 
     /* Management */
     .row-content > div > button {
-        background-color: aquamarine;
-        border: 1px solid aquamarine;
+        background-color: #fff;
+        border: 2px solid #e0f2ff;
+        color: #1a73e8;
         border-radius: 5px;
         width: 300px;
         height: 100px;
@@ -292,8 +312,9 @@ li {
         height: 200px;
     }
     .row-content > div > button {
-        background-color: aquamarine;
-        border: 1px solid aquamarine;
+        background-color: #fff;
+        border: 2px solid #e0f2ff;
+        color: #1a73e8;
         border-radius: 5px;
         width: 200px;
         height: 200px;

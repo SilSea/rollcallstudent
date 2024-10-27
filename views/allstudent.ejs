@@ -38,8 +38,8 @@
             <div class="header-content">ข้อมูลนักศึกษาทั้งหมด</div>
             <div class="searchBox"><input class="form-control" type="text" name="searchBox" id="searchBox" placeholder="ค้นหานักศึกษา"></div>
             <div class="rowButtonBox">
-                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'">ย้อนกลับ</button>
-                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addstudent'">เพิ่มข้อมูลนักศึกษา</button>
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/dashboard'"><i class="fa-solid fa-left"></i> ย้อนกลับ</button>
+                <button class="btn btn-outline-info" type="button" onclick="window.location.href='/addstudent'"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูลนักศึกษา</button>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -79,7 +79,7 @@
                             <% }else{ %>
                             <td><img src="/imgs/cancel.png" width="15px"></td>
                             <% } %>
-                            <td><button class="btn btn-outline-success" onclick="editData('/editstudent/',<%= student.student_id %>);">แก้ไขข้อมูล</button></td>
+                            <td><button class="btn btn-outline-success" onclick="editData('/editstudent/',<%= student.student_id %>);"><i class="fa-duotone fa-solid fa-pen-to-square"></i> แก้ไขข้อมูล</button></td>
                         </tr>
                         <% }); %>
                     </tbody>
