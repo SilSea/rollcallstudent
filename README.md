@@ -2,12 +2,12 @@
 
 ### 📦Features📦
 
-### 1.CalendarRollcall
+### 1. CalendarRollcall ✅
 
-### 2.Add,Update,Delete Rollcall
+### 2. Add,Update,Delete Rollcall ✅
 
-### 3.Add,Update Student
+### 3. Add,Update Student ✅
 
-### 4.Add,Update Curriculum
+### 4. Add,Update Curriculum ✅
 
-### 5.Add,Update Section
+### 5. Add,Update Section ✅
