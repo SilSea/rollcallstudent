@@ -1,6 +1,6 @@
 # This project is a web application to rollcallstudent
 
-### Develop on NodeJS <img src="https://github.com/user-attachments/assets/edc20dfa-813b-4c35-83b2-776426714c07" alt="NodeJS Logo" width="25px" />
+### Develop on <img src="https://github.com/user-attachments/assets/edc20dfa-813b-4c35-83b2-776426714c07" alt="NodeJS Logo" width="25px" /> NodeJS <img src="https://github.com/user-attachments/assets/edc20dfa-813b-4c35-83b2-776426714c07" alt="NodeJS Logo" width="25px" />
 
 ### Database use PostgreSql
 
